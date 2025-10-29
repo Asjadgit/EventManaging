@@ -1,0 +1,19 @@
+{
+    "name": "asjad/admin",
+    "description": "Admin Module to handle activites",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Asjad\\Admin" : "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Asjad\\Admin\\Providers\\AdminServiceProvider"
+            ]
+        }
+    },
+    "require": {}
+}
