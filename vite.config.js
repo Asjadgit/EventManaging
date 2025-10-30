@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
+import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
     plugins: [
@@ -10,6 +11,19 @@ export default defineConfig({
             refresh: true,
         }),
         tailwindcss(),
-        vue(),
+        vue({
+            template: {
+                compilerOptions: {
+                    // Enable Options API
+                    isCustomElement: tag => tag.startsWith('x-')
+                }
+            }
+        }),
     ],
+    resolve: {
+        alias: {
+            'vue': fileURLToPath(new URL('./node_modules/vue/dist/vue.esm-bundler.js', import.meta.url)),
+            '@': fileURLToPath(new URL('./resources/js', import.meta.url)),
+        },
+    }
 });

@@ -23,6 +23,10 @@ Route::get('/contact-us', function () {
     return view('contact');
 });
 
+Route::get('/login', function () {
+    return view('auth.login');
+});
+
 Route::get('/admin/dashboard', function () {
     return view('admin.layouts.app');
 });

@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-
-<!-- Hero Section -->
-    <section class="pt-32 pb-20 bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">
+    <!-- Hero Section -->
+    <v-index-page></v-index-page>
+    @pushOnce('scripts')
+        <script type="text/x-template" id="v-index-page">
+    <div>
+        <section class="pt-32 pb-20 bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">
         <!-- Animated background elements -->
         <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full floating"></div>
         <div class="absolute top-1/3 right-20 w-16 h-16 bg-indigo-500/20 rounded-full floating" style="animation-delay: 2s;"></div>
@@ -378,6 +381,100 @@
             </div>
         </div>
     </section>
+    </div>
 
+</script>
 
+        <script type="module">
+            window.app.component('v-index-page', {
+                template: '#v-index-page',
+                mounted() {
+                    const fadeElements = document.querySelectorAll('.fade-in');
+                    const slideLeftElements = document.querySelectorAll('.slide-in-left');
+                    const slideRightElements = document.querySelectorAll('.slide-in-right');
+
+                    const observerOptions = {
+                        threshold: 0.1,
+                        rootMargin: '0px 0px -50px 0px'
+                    };
+
+                    const fadeInObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                            }
+                        });
+                    }, observerOptions);
+
+                    fadeElements.forEach(element => fadeInObserver.observe(element));
+                    slideLeftElements.forEach(element => fadeInObserver.observe(element));
+                    slideRightElements.forEach(element => fadeInObserver.observe(element));
+
+                    // Image carousel
+                    const carouselTrack = document.getElementById('carouselTrack');
+                    const dots = document.querySelectorAll('.carousel-dot');
+                    let currentIndex = 0;
+                    let autoSlideInterval;
+
+                    function updateCarousel() {
+                        carouselTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        dots.forEach((dot, index) => {
+                            dot.classList.toggle('active', index === currentIndex);
+                        });
+                    }
+
+                    function startAutoSlide() {
+                        autoSlideInterval = setInterval(() => {
+                            currentIndex = (currentIndex + 1) % dots.length;
+                            updateCarousel();
+                        }, 5000);
+                    }
+
+                    function stopAutoSlide() {
+                        clearInterval(autoSlideInterval);
+                    }
+
+                    dots.forEach((dot, index) => {
+                        dot.addEventListener('click', () => {
+                            currentIndex = index;
+                            updateCarousel();
+                            stopAutoSlide();
+                            startAutoSlide();
+                        });
+                    });
+
+                    startAutoSlide();
+
+                    carouselTrack.addEventListener('mouseenter', stopAutoSlide);
+                    carouselTrack.addEventListener('mouseleave', startAutoSlide);
+
+                    // Navbar scroll effect
+                    const navbar = document.getElementById('navbar');
+                    window.addEventListener('scroll', () => {
+                        if (window.scrollY > 50) {
+                            navbar.classList.add('nav-scrolled');
+                        } else {
+                            navbar.classList.remove('nav-scrolled');
+                        }
+                    });
+
+                    // Smooth scrolling
+                    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                        anchor.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const targetId = this.getAttribute('href');
+                            if (targetId === '#') return;
+                            const targetElement = document.querySelector(targetId);
+                            if (targetElement) {
+                                window.scrollTo({
+                                    top: targetElement.offsetTop - 80,
+                                    behavior: 'smooth'
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+        </script>
+    @endPushOnce
 @endsection
