@@ -21,7 +21,7 @@ Route::get('/portfolio', function () {
 
 Route::get('/contact-us', function () {
     return view('contact');
-});
+})->name('contact');
 
 Route::get('/login', function () {
     return view('auth.login');
