@@ -37,7 +37,7 @@
 
             <!-- Buttons -->
             <div class="flex items-center space-x-4">
-                <a href="#" class="text-gray-600 hover:text-gray-900 font-medium hidden sm:block transition-colors duration-300 hover-lift px-3 py-1 rounded-lg">
+                <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-900 font-medium hidden sm:block transition-colors duration-300 hover-lift px-3 py-1 rounded-lg">
                     Sign In
                 </a>
                 <a href="contact.html" class="btn-primary text-white px-5 py-2.5 rounded-lg font-medium shadow-lg">

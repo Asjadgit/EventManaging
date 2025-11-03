@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
+    <style>
         :root {
             --primary: #6366f1;
             --primary-dark: #4f46e5;
@@ -662,8 +662,8 @@
             </div>
         </div>
     </div>
-
-    <script>
+@pushOnce('scripts')
+<script>
         // Scroll animation
         document.addEventListener('DOMContentLoaded', function() {
             const fadeElements = document.querySelectorAll('.fade-in');
@@ -787,7 +787,7 @@
             });
         });
     </script>
-
+@endPushOnce
 
 @endsection
 

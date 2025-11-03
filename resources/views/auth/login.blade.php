@@ -1,101 +1,7 @@
 @extends('layouts.app')
 
-
 @section('content')
  <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ec4899;
-            --accent: #f59e0b;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .serif {
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, var(--primary), var(--secondary));
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, var(--primary-dark), var(--secondary));
-        }
-
-        /* Animation classes */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Floating animation */
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        .floating {
-            animation: float 8s ease-in-out infinite;
-        }
-
-        /* Gradient text */
-        .gradient-text {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Glow effect */
-        .glow {
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-        }
-
-        /* Button animations */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-        }
-
         /* Form styles */
         .form-group {
             margin-bottom: 1.5rem;
@@ -158,7 +64,8 @@
         }
     </style>
 
-<!-- Background Elements -->
+    <section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-indigo-50 to-purple-50 overflow-hidden">
+        <!-- Background Elements -->
     <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full floating"></div>
     <div class="absolute top-1/3 right-20 w-16 h-16 bg-indigo-500/20 rounded-full floating" style="animation-delay: 2s;"></div>
     <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-purple-500/20 rounded-full floating" style="animation-delay: 4s;"></div>
@@ -169,7 +76,7 @@
     <div class="absolute -top-20 -right-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"></div>
 
     <!-- Login Container -->
-    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-md fade-in">
+    <div class="relative z-10 mt-10 bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-md fade-in">
         <div class="p-8">
             <!-- Logo -->
             <div class="text-center mb-8">
@@ -308,17 +215,11 @@
         <div class="bg-gray-50 px-8 py-4 border-t border-gray-200 text-center">
             <p class="text-gray-500 text-sm">© 2024 Eventé. All rights reserved.</p>
         </div>
-    </div>                
+    </div>
+    </section>
 
-@endsection
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-
-
-    <script>
+@pushOnce('scripts')
+<script>
         // Scroll animation
         document.addEventListener('DOMContentLoaded', function() {
             const fadeElements = document.querySelectorAll('.fade-in');
@@ -410,5 +311,6 @@
             });
         });
     </script>
-</body>
-</html>
+@endPushOnce
+@endsection
+
