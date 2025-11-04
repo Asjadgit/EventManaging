@@ -133,10 +133,10 @@
                     </div>
 
                     <!-- Google Sign In -->
-                    <button class="w-full flex items-center justify-center py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-6">
+                   <a href="{{ route('google.login') }}" class="w-full flex items-center justify-center py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-6">
                         <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE2LjUxIDkuMjA0NTVDMTYuNTEgOC41NjYzNiAxNi40NDkgNy45NTQ1NSAxNi4zMTYgNy4zNjM2NEg5LjIyVjEwLjg0NTVIMTMuMTg0QzEzLjAyIDEyLjAxODIgMTIuMzAyIDEyLjk3MjcgMTEuMjE2IDEzLjU2ODJWMTUuODk1NUgxNC4wODRDMTUuNzA0IDE0LjMyNzMgMTYuNTEgMTIuMDA5MSAxNi41MSA5LjIwNDU1WiIgZmlsbD0iIzQyODVGNCIvPgo8cGF0aCBkPSJNOS4yMiAxOC4wMDAxQzExLjc5NiAxOC4wMDAxIDEzLjk2IDE3LjE3MjcgMTUuNTI0IDE1Ljg5NTVMMTEuMjE2IDEzLjU2ODJDMTAuMzA3IDE0LjEwOTEgOS4xNTIgMTQuNDE4MiA3Ljg4IDE0LjQxODJDNS4zNTMgMTQuNDE4MiAzLjE5OCAxMi42MzY0IDIuNDM3IDEwLjI5MDlIMC40MTYwMTZWMTIuNzA5MUMxLjk4IDE1LjkxODIgNS4xNTIgMTguMDAwMSA5LjIyIDE4LjAwMDFaIiBmaWxsPSIjMzRBODUzIi8+CjxwYXRoIGQ9Ik0yLjQzNyAxMC4yOTA5QzIuMTM4IDkuNDA5MDkgMi4xMzggOC40MzE4MiAyLjQzNyA3LjU1QzIuNzM2IDYuNjY4MTggMy4zMzUgNS45MjcyNyA0LjE5NCA1LjQwOTA5TDAuNDE2MDE2IDMuMDc3MjdDLTAuNTc0OTg0IDQuOTU0NTUgLTAuMTM1MDE2IDcuMzU0NTUgMS4zNTUgOS4yMDQ1NUwyLjQzNyAxMC4yOTA5WiIgZmlsbD0iI0ZCQkMwNCIvPgo8cGF0aCBkPSJNOS4yMiAzLjU4MTgyQzExLjA1IDMuNTgxODIgMTIuNjM0IDQuMjU0NTUgMTMuNzkgNS40MDkwOUwxNi41MSAyLjY5MDkxQzE0Ljk2IDEuMTg2MzYgMTIuODA1IDAuMjcyNzI3IDkuMjIgMC4yNzI3MjdDNS4xNTIgMC4yNzI3MjcgMS45OCAyLjM1NDU1IDAuNDE2MDE2IDUuNTYzNjRMNC4xOTQgNy44OTU0NUM0Ljk1MyA1LjU1IDcuMTA4IDMuNTgxODIgOS4yMiAzLjU4MTgyWiIgZmlsbD0iI0VBNDMzRiIvPgo8L3N2Zz4K" alt="Google" class="w-5 h-5 mr-3">
                         Continue with Google
-                    </button>
+                   </a>
 
                     <!-- Register Link -->
                     <div class="text-center">
@@ -196,10 +196,10 @@
                     </div>
 
                     <!-- Google Sign Up -->
-                    <button class="w-full flex items-center justify-center py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-6">
+                    <a href="{{ route('google.login') }}" class="w-full flex items-center justify-center py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-6">
                         <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE2LjUxIDkuMjA0NTVDMTYuNTEgOC41NjYzNiAxNi40NDkgNy45NTQ1NSAxNi4zMTYgNy4zNjM2NEg5LjIyVjEwLjg0NTVIMTMuMTg0QzEzLjAyIDEyLjAxODIgMTIuMzAyIDEyLjk3MjcgMTEuMjE2IDEzLjU2ODJWMTUuODk1NUgxNC4wODRDMTUuNzA0IDE0LjMyNzMgMTYuNTEgMTIuMDA5MSAxNi41MSA5LjIwNDU1WiIgZmlsbD0iIzQyODVGNCIvPgo8cGF0aCBkPSJNOS4yMiAxOC4wMDAxQzExLjc5NiAxOC4wMDAxIDEzLjk2IDE3LjE3MjcgMTUuNTI0IDE1Ljg5NTVMMTEuMjE2IDEzLjU2ODJDMTAuMzA3IDE0LjEwOTEgOS4xNTIgMTQuNDE4MiA3Ljg4IDE0LjQxODJDNS4zNTMgMTQuNDE4MiAzLjE5OCAxMi42MzY0IDIuNDM3IDEwLjI5MDlIMC40MTYwMTZWMTIuNzA5MUMxLjk4IDE1LjkxODIgNS4xNTIgMTguMDAwMSA5LjIyIDE4LjAwMDFaIiBmaWxsPSIjMzRBODUzIi8+CjxwYXRoIGQ9Ik0yLjQzNyAxMC4yOTA5QzIuMTM4IDkuNDA5MDkgMi4xMzggOC40MzE4MiAyLjQzNyA3LjU1QzIuNzM2IDYuNjY4MTggMy4zMzUgNS45MjcyNyA0LjE5NCA1LjQwOTA5TDAuNDE2MDE2IDMuMDc3MjdDLTAuNTc0OTg0IDQuOTU0NTUgLTAuMTM1MDE2IDcuMzU0NTUgMS4zNTUgOS4yMDQ1NUwyLjQzNyAxMC4yOTA5WiIgZmlsbD0iI0ZCQkMwNCIvPgo8cGF0aCBkPSJNOS4yMiAzLjU4MTgyQzExLjA1IDMuNTgxODIgMTIuNjM0IDQuMjU0NTUgMTMuNzkgNS40MDkwOUwxNi41MSAyLjY5MDkxQzE0Ljk2IDEuMTg2MzYgMTIuODA1IDAuMjcyNzI3IDkuMjIgMC4yNzI3MjdDNS4xNTIgMC4yNzI3MjcgMS45OCAyLjM1NDU1IDAuNDE2MDE2IDUuNTYzNjRMNC4xOTQgNy44OTU0NUM0Ljk1MyA1LjU1IDcuMTA4IDMuNTgxODIgOS4yMiAzLjU4MTgyWiIgZmlsbD0iI0VBNDMzRiIvPgo8L3N2Zz4K" alt="Google" class="w-5 h-5 mr-3">
                         Sign up with Google
-                    </button>
+                    </a>
 
                     <!-- Login Link -->
                     <div class="text-center">
