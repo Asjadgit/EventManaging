@@ -14,11 +14,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
-Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.layouts.app');
-    })->name('admin.dashboard');
-});
 
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
