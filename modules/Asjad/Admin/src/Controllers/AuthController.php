@@ -15,23 +15,34 @@ class AuthController extends Controller
         return view('admin::auth.login');
     }
 
-   public function login(Request $request)
-{
-    try {
-        $email = $request->input('email');
-        $pass = $request->input('pass');
+    public function login(Request $request)
+    {
+        try {
+            $email = $request->input('email');
+            $pass = $request->input('pass');
 
-        $user = User::where('email', $email)->first();
+            $user = User::where('email', $email)->first();
 
-        if (!$user || !Hash::check($pass, $user->password)) {
-            return back()->withErrors(['error' => 'Invalid email or password.']);
+            if (!$user || !Hash::check($pass, $user->password)) {
+                return back()->withErrors(['error' => 'Invalid email or password.']);
+            }
+
+            Auth::login($user);
+            return redirect()->route('admin.dashboard');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
         }
-
-        Auth::login($user);
-        return redirect()->route('admin.dashboard');
-    } catch (\Exception $e) {
-        return back()->withErrors(['error' => $e->getMessage()]);
     }
-}
 
+    public function dashboard()
+    {
+        return view('admin::dashboard');
+    }
+
+    public function logout()
+    {
+        $user = auth()->user();
+        Auth::logout($user);
+        return redirect()->route('admin.login');
+    }
 }

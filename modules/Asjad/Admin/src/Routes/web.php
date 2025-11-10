@@ -8,8 +8,7 @@ Route::middleware(['web'])->group(function () {
     Route::post('admin/login', [AuthController::class, 'login'])->name('admin.login');
 
     Route::prefix('admin')->middleware('auth')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin::layouts.app');
-        })->name('admin.dashboard');
+        Route::get('/dashboard', [AuthController::class,'dashboard'])->name('admin.dashboard');
+        Route::post('/logout',[AuthController::class,'logout'])->name('admin.logout');
     });
 });
