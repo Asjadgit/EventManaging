@@ -218,7 +218,7 @@
     @include('admin::layouts.include.sidebar')
 
     <!-- Main Content -->
-    <div class="main-content min-h-screen">
+    <div class="main-content min-h-screen" id="app">
         <!-- Top Bar -->
         @include('admin::layouts.include.header')
 
@@ -310,114 +310,61 @@
         <span id="notificationText">Event added successfully!</span>
     </div>
 
+    <!-- Loading state for better UX -->
+    <div id="app-loading" class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-300">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+            <p class="text-gray-600">Loading {{ config('app.name', 'Eventé') }}...</p>
+        </div>
+    </div>
+
+    @stack('scripts')
+
     <script>
-        // Sidebar Toggle
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            const sidebar = document.querySelector('.sidebar');
-            const mainContent = document.querySelector('.main-content');
-
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
-        });
-
-        // Modal Handling
-        const addEventBtn = document.getElementById('addEventBtn');
-        const addEventModal = document.getElementById('addEventModal');
-        const closeModal = document.getElementById('closeModal');
-        const cancelEvent = document.getElementById('cancelEvent');
-        const eventForm = document.getElementById('eventForm');
-        const notification = document.getElementById('notification');
-        const notificationText = document.getElementById('notificationText');
-
-        function openModal() {
-            addEventModal.style.display = 'flex';
-        }
-
-        function closeModalFunc() {
-            addEventModal.style.display = 'none';
-        }
-
-        function showNotification(message, type = 'success') {
-            notificationText.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        addEventBtn.addEventListener('click', openModal);
-        closeModal.addEventListener('click', closeModalFunc);
-        cancelEvent.addEventListener('click', closeModalFunc);
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target === addEventModal) {
-                closeModalFunc();
-            }
-        });
-
-        // Form Submission
-        eventForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real application, you would send the form data to a server here
-            closeModalFunc();
-            showNotification('Event added successfully!', 'success');
-        });
-
-        // Revenue Chart
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(revenueCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Revenue',
-                    data: [25000, 32000, 28000, 40000, 35000, 42000, 48000, 52000, 45000, 55000, 60000, 65000],
-                    borderColor: '#6366f1',
-                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawBorder: false
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value.toLocaleString();
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading indicator when Vue app is ready
+            const hideLoadingIndicator = () => {
+                const loadingElement = document.getElementById('app-loading');
+                if (loadingElement) {
+                    loadingElement.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingElement.style.display = 'none';
+                    }, 300);
                 }
-            }
-        });
+            };
 
-        // Tab functionality
-        const tabButtons = document.querySelectorAll('.tab-button');
-        tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            });
+            // Mount Vue app with error handling
+            const mountVueApp = () => {
+                if (window.app && typeof window.app.mount === 'function') {
+                    try {
+                        window.app.mount('#app');
+                        console.log('Vue app mounted successfully');
+                        hideLoadingIndicator();
+                    } catch (error) {
+                        console.error('Failed to mount Vue app:', error);
+                        // Show error message to user
+                        document.getElementById('app').innerHTML = `
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                                <h2 class="text-lg font-medium text-red-800 mb-2">Application Error</h2>
+                                <p class="text-red-600">Failed to load the application. Please refresh the page.</p>
+                                <button onclick="window.location.reload()" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
+                                    Reload Page
+                                </button>
+                            </div>
+                        `;
+                        hideLoadingIndicator();
+                    }
+                } else {
+                    // Retry mounting after a short delay if app isn't available yet
+                    setTimeout(mountVueApp, 100);
+                }
+            };
+
+            // Start mounting process
+            mountVueApp();
+
+            // Fallback: hide loading indicator after 10 seconds
+            setTimeout(hideLoadingIndicator, 10000);
         });
     </script>
 </body>
