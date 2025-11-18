@@ -97,93 +97,90 @@
                             <input type="text" id="search" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="Search categories...">
                         </div>
                     </div>
-                    <div class="flex space-x-3">
-                        <button id="sort-by-name" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <svg class="mr-2 h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-                            </svg>
-                            Sort by Name
-                        </button>
-                        <button id="sort-by-events" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <svg class="mr-2 h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                            </svg>
-                            Sort by Events
-                        </button>
-                    </div>
                 </div>
             </div>
 
-            <!-- Categories Grid -->
+            <!-- Categories Table -->
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 @if(isset($categories) && $categories->count() > 0)
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 p-6">
-                    @foreach($categories as $category)
-                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-12 w-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                        <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-medium text-gray-900">{{ $category->name }}</h3>
-                                        <p class="text-sm text-gray-500">{{ $category->events_count ?? 0 }} events</p>
-                                    </div>
-                                </div>
-                                <div class="relative">
-                                    <button type="button" class="category-actions inline-flex items-center p-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" data-category-id="{{ $category->id }}">
-                                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                        </svg>
-                                    </button>
-
-                                    <!-- Dropdown menu -->
-                                    <div id="dropdown-{{ $category->id }}" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-                                        <div class="py-1" role="menu" aria-orientation="vertical">
-                                            <a href="{{ route('admin.events.categories.edit', $category->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                                <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                                Edit Category
-                                            </a>
-                                            <form action="{{ route('admin.events.categories.delete', $category->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-red-700 hover:bg-gray-100" role="menuitem" onclick="return confirm('Are you sure you want to delete this category? This action cannot be undone.')">
-                                                    <svg class="mr-3 h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                    Delete Category
-                                                </button>
-                                            </form>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Events</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Active Events</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr v-for="category in categoryList" :key="category.id" class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                            <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                            </svg>
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">@{{ category.name }}</div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900 max-w-xs truncate">@{{ category.description ?? 'No description provided.' }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@{{ category.events_count ?? 0 }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        @{{ category.active_events_count ?? 0 }} active
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @{{ formatDate(category.created_at) }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @{{ formatDate(category.updated_at) }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="relative inline-block text-left">
+                                        <button type="button" class="category-actions inline-flex items-center p-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" data-category-id="@{{ category.id }}">
+                                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                            </svg>
+                                        </button>
 
-                            <p class="text-sm text-gray-600 mb-4 line-clamp-2">
-                                {{ $category->description ?? 'No description provided.' }}
-                            </p>
-
-                            <div class="flex items-center justify-between text-xs text-gray-500">
-                                <span>Created: {{ $category->created_at->format('M d, Y') }}</span>
-                                <span>Updated: {{ $category->updated_at->format('M d, Y') }}</span>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-gray-200 px-6 py-3 bg-gray-50 rounded-b-lg">
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-600">Active events in this category</span>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    {{ $category->active_events_count ?? 0 }} active
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
+                                        <!-- Dropdown menu -->
+                                        <div id="dropdown-@{{ category.id }}" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                                            <div class="py-1" role="menu" aria-orientation="vertical">
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                                    <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                    </svg>
+                                                    Edit Category
+                                                </a>
+                                                <form action="#" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-red-700 hover:bg-gray-100" role="menuitem" onclick="return confirm('Are you sure you want to delete this category? This action cannot be undone.')">
+                                                        <svg class="mr-3 h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                        Delete Category
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 @else
                 <!-- Empty State -->
@@ -197,7 +194,7 @@
                 @endif
             </div>
 
-                    <!-- Modal -->
+            <!-- Modal -->
             <div v-if="modal" id="modal" class="fixed inset-0 z-50" role="dialog" aria-modal="true">
                 <!-- Backdrop -->
                 <div id="backdrop" class="absolute inset-0 bg-black/50"></div>
@@ -261,40 +258,54 @@
 
         <script type="module">
             window.app.component('v-events-categories', {
-                        template: '#v-events-categories-template',
-                        data() {
-                            return {
-                                modal: false,
-                                categories: {
-                                    name: '',
-                                    description: '',
-                                },
-                            }
+                template: '#v-events-categories-template',
+                data() {
+                    return {
+                        modal: false,
+                        categories: {
+                            name: '',
+                            description: '',
                         },
-                        methods: {
-                            showModal() {
-                                this.modal = true;
-                            },
-                            closeModal() {
-                                this.modal = false;
-                            },
-                            refreshModal(){
-                                this.categories.name = '';
-                                this.categories.description = '';
-                            },
-                            storeCategory() {
-                                this.$axios.post('/admin/events/categories/store', this.categories)
-                                    .then(response => {
-                                        // console.log(response.data);
-                                        this.refreshModal();
-                                        this.closeModal();
-                                    })
-                                    .catch(error => {
-                                            console.error(error);
-                                        });
-                                    }
-                            },
-                        })
+                        categoryList: @json($categories->items()) // <-- This is now reactive
+                    }
+                },
+                methods: {
+                    formatDate(date) {
+                        if (!date) return '';
+                        const d = new Date(date);
+                        return d.toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: '2-digit',
+                            year: 'numeric'
+                        });
+                    },
+                    showModal() {
+                        this.modal = true;
+                    },
+                    closeModal() {
+                        this.modal = false;
+                    },
+                    refreshModal() {
+                        this.categories.name = '';
+                        this.categories.description = '';
+                    },
+                    storeCategory() {
+                        this.$axios.post('/admin/events/categories/store', this.categories)
+                            .then(response => {
+                                const newCategory = response.data.category;
+
+                                // Add to the top of the list
+                                this.categoryList.unshift(newCategory);
+                                // console.log(response.data);
+                                this.refreshModal();
+                                this.closeModal();
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    },
+                },
+            })
         </script>
     @endPushOnce
 @endsection

@@ -11,7 +11,7 @@ class EventCategoryController extends Controller
     public function index()
     {
         $categories = Category::withCount('events')->paginate(10);
-        return view('admin::Events.Categories.index',compact('categories'));
+        return view('admin::Events.Categories.index', compact('categories'));
     }
 
     public function store(Request $request)
@@ -19,11 +19,17 @@ class EventCategoryController extends Controller
         try {
             $data = $request->all();
 
-            Category::create($data);
+            // Save category in DB
+            $category = Category::create($data);
+
+            // Add default counts to prevent errors in the UI
+            $category->events_count = 0;
+            $category->active_events_count = 0;
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Category Successfully Added!'
+                'message' => 'Category Successfully Added!',
+                'category' => $category
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
