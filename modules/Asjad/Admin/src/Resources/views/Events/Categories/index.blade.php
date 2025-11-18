@@ -174,13 +174,13 @@
                             </div>
                         </div>
 
-                        <!--<div class="border-t border-gray-200 px-6 py-3 bg-gray-50 rounded-b-lg">
+                        <div class="border-t border-gray-200 px-6 py-3 bg-gray-50 rounded-b-lg">
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-600">Active events in this category</span>
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                     {{ $category->active_events_count ?? 0 }} active
                                 </span>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     @endforeach

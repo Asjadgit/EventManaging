@@ -10,7 +10,8 @@ class EventCategoryController extends Controller
 {
     public function index()
     {
-        return view('admin::Events.Categories.index');
+        $categories = Category::withCount('events')->paginate(10);
+        return view('admin::Events.Categories.index',compact('categories'));
     }
 
     public function store(Request $request)
