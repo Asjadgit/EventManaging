@@ -29,7 +29,6 @@ class EventCategoryController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Category Successfully Added!',
-                'category' => $category
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

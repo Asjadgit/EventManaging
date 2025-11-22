@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Eventé</title>
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -23,6 +26,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
         }
+
         .serif {
             font-family: 'Playfair Display', serif;
         }
@@ -31,13 +35,16 @@
         ::-webkit-scrollbar {
             width: 6px;
         }
+
         ::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
+
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(to bottom, var(--primary), var(--secondary));
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(to bottom, var(--primary-dark), var(--secondary));
         }
@@ -49,12 +56,15 @@
             transition: all 0.3s ease;
             z-index: 1000;
         }
+
         .sidebar.collapsed {
             width: 70px;
         }
+
         .sidebar.collapsed .sidebar-text {
             display: none;
         }
+
         .sidebar.collapsed .logo-text {
             display: none;
         }
@@ -64,6 +74,7 @@
             margin-left: var(--sidebar-width);
             transition: all 0.3s ease;
         }
+
         .main-content.expanded {
             margin-left: 70px;
         }
@@ -75,6 +86,7 @@
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
         }
+
         .dashboard-card:hover {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
@@ -84,6 +96,7 @@
             width: 100%;
             border-collapse: collapse;
         }
+
         .data-table th {
             background-color: #f8fafc;
             padding: 12px 16px;
@@ -92,11 +105,13 @@
             color: #374151;
             border-bottom: 1px solid #e5e7eb;
         }
+
         .data-table td {
             padding: 12px 16px;
             border-bottom: 1px solid #e5e7eb;
             color: #6b7280;
         }
+
         .data-table tr:hover {
             background-color: #f9fafb;
         }
@@ -108,18 +123,22 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
+
         .status-pending {
             background-color: #fef3c7;
             color: #d97706;
         }
+
         .status-confirmed {
             background-color: #d1fae5;
             color: #059669;
         }
+
         .status-completed {
             background-color: #e0e7ff;
             color: #4f46e5;
         }
+
         .status-cancelled {
             background-color: #fee2e2;
             color: #dc2626;
@@ -132,6 +151,7 @@
             font-weight: 500;
             transition: all 0.2s ease;
         }
+
         .tab-button.active {
             background-color: var(--primary);
             color: white;
@@ -150,6 +170,7 @@
             align-items: center;
             justify-content: center;
         }
+
         .modal-content {
             background: white;
             border-radius: 12px;
@@ -159,21 +180,31 @@
             overflow-y: auto;
             animation: modalFadeIn 0.3s ease;
         }
+
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Form styles */
         .form-group {
             margin-bottom: 1.5rem;
         }
+
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
             color: #374151;
         }
+
         .form-input {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -181,6 +212,7 @@
             border-radius: 0.5rem;
             transition: all 0.3s ease;
         }
+
         .form-input:focus {
             outline: none;
             border-color: var(--primary);
@@ -202,20 +234,28 @@
             transform: translateX(150%);
             transition: transform 0.3s ease;
         }
+
         .notification.show {
             transform: translateX(0);
         }
+
         .notification.success {
             border-left: 4px solid #10b981;
         }
+
         .notification.error {
             border-left: 4px solid #ef4444;
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
     <!-- Sidebar -->
     @include('admin::layouts.include.sidebar')
+
+    <!-- Global Toast Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col space-y-2 w-80 max-w-full items-end"></div>
+
 
     <!-- Main Content -->
     <div class="main-content min-h-screen" id="app">
@@ -292,10 +332,12 @@
                     </div>
 
                     <div class="flex justify-end space-x-3 mt-6">
-                        <button type="button" id="cancelEvent" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                        <button type="button" id="cancelEvent"
+                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
                             Cancel
                         </button>
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+                        <button type="submit"
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
                             Save Event
                         </button>
                     </div>
@@ -304,16 +346,12 @@
         </div>
     </div>
 
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <i class="fas fa-check-circle mr-2 text-green-500"></i>
-        <span id="notificationText">Event added successfully!</span>
-    </div>
-
     <!-- Loading state for better UX -->
-    <div id="app-loading" class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-300">
+    <div id="app-loading"
+        class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-300">
         <div class="text-center">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4">
+            </div>
             <p class="text-gray-600">Loading {{ config('app.name', 'Eventé') }}...</p>
         </div>
     </div>
@@ -321,7 +359,50 @@
     @stack('scripts')
 
     <script>
+        window.showToast = function(message, type = 'success', duration = 4000) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `
+            toast transform translate-x-full scale-90 opacity-0 flex items-center space-x-3
+            ${type === 'success' ? 'bg-green-50 border border-green-300 text-green-800' : 'bg-red-50 border border-red-300 text-red-800'}
+            px-4 py-2.5 rounded-lg shadow-md
+            transition-all duration-500 ease-out
+        `;
+
+            toast.innerHTML = `
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                ${type === 'success'
+                    ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />'
+                    : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />'}
+            </svg>
+            <div class="flex-1 text-sm font-medium">${message}</div>
+            <button onclick="this.parentElement.remove()" class="${type === 'success' ? 'text-green-700 hover:text-green-900' : 'text-red-700 hover:text-red-900'} font-bold text-lg">&times;</button>
+        `;
+
+            container.appendChild(toast);
+
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full', 'scale-90', 'opacity-0');
+                toast.classList.add('translate-x-0', 'scale-100', 'opacity-100');
+            }, 50);
+
+            // Auto-hide
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'scale-90', 'opacity-0');
+                setTimeout(() => toast.remove(), 500);
+            }, duration);
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                showToast("{{ session('success') }}", 'success');
+            @endif
+            @if (session('error'))
+                showToast("{{ session('error') }}", 'error');
+            @endif
             // Hide loading indicator when Vue app is ready
             const hideLoadingIndicator = () => {
                 const loadingElement = document.getElementById('app-loading');
@@ -368,4 +449,5 @@
         });
     </script>
 </body>
+
 </html>
