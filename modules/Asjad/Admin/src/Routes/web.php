@@ -21,11 +21,9 @@ Route::middleware(['web'])->group(function () {
 
             Route::post('/categories/store',[EventCategoryController::class,'store'])->name('admin.events.categories.store');
 
-            Route::get('/categories/{id}/edit',[EventCategoryController::class,'edit'])->name('admin.events.categories.edit');
-
             Route::put('/categories/{id}/update',[EventCategoryController::class,'update'])->name('admin.events.categories.update');
 
-            Route::get('/categories/{id}/delete',[EventCategoryController::class,'destroy'])->name('admin.events.categories.delete');
+            Route::delete('/categories/{id}/delete',[EventCategoryController::class,'destroy'])->name('admin.events.categories.delete');
 
             Route::get('/',[EventController::class,'index'])->name('admin.events.index');
         });

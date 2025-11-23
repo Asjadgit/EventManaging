@@ -26,66 +26,6 @@
                 </div>
             </div>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 gap-5 sm:grid-cols-3 mb-8">
-                <!-- Total Categories Card -->
-                <div class="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
-                    <div class="px-4 py-5 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-indigo-50 rounded-lg p-3">
-                                <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Categories</dt>
-                                    <dd class="text-lg font-semibold text-gray-900">{{ $categories->count() ?? 0 }}</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Active Events Card -->
-                <div class="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
-                    <div class="px-4 py-5 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-green-50 rounded-lg p-3">
-                                <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Active Events</dt>
-                                    <dd class="text-lg font-semibold text-gray-900">{{ $activeEventsCount ?? 0 }}</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Most Popular Category Card -->
-                <div class="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
-                    <div class="px-4 py-5 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-blue-50 rounded-lg p-3">
-                                <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Most Popular</dt>
-                                    <dd class="text-sm font-semibold text-gray-900 truncate">{{ $mostPopularCategory ?? 'N/A' }}</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Search and Filters -->
             <div class="mb-6 bg-white shadow rounded-lg border border-gray-200 p-4">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
@@ -96,7 +36,7 @@
                                     <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <input type="text" id="search" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="Search categories...">
+                            <input type="text" id="search" name="search" v-model="search" @keyup="searchFilter()" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="Search categories...">
                         </div>
                     </div>
                 </div>
@@ -236,12 +176,14 @@
                     return {
                         modal: false,
                         mode: 'create',
+                        search: '',
                         categories: {
                             id: null,
                             name: '',
                             description: '',
                         },
-                        categoriesList: @json($categories->items()),
+                        allCategories: @json($categories->toArray()),
+                        categoriesList: @json($categories->toArray()),
                     }
                 },
                 methods: {
@@ -273,24 +215,68 @@
                     closeModal() {
                         this.modal = false;
                     },
+                    refreshModal() {
+                        this.categories.id = null;
+                        this.categories.name = '';
+                        this.categories.description = '';
+                    },
                     storeCategory() {
-                        this.$axios.post('/admin/events/categories/store', this.categories)
-                            .then(response => {
-                                showToast(response.data.message, response.data.status); // ✅ global toast
-                                this.closeModal();
-                                this.refreshModal();
-                            })
-                            .catch(error => {
-                                showToast('Failed to save category', 'error');
-                                console.error(error);
-                            });
+                        if (this.mode === 'create') {
+                            this.$axios.post('/admin/events/categories/store', this.categories)
+                                .then(response => {
+                                    showToast(response.data.message, response.data.status); // ✅ global toast
+                                    this.categoriesList.push(response.data
+                                        .category); // add newly created category to list
+                                    this.closeModal();
+                                    this.refreshModal();
+                                })
+                                .catch(error => {
+                                    showToast('Failed to save category', 'error');
+                                    console.error(error);
+                                });
+                        } else if (this.mode === 'edit') {
+                            this.$axios.put(`/admin/events/categories/${this.categories.id}/update`, this.categories)
+                                .then(response => {
+                                    showToast(response.data.message, response.data.status);
+                                    const index = this.categoriesList.findIndex(c => c.id === this.categories.id);
+                                    if (index !== -1) {
+                                        this.categoriesList[index] = response.data.category;
+                                    }
+
+                                    this.closeModal();
+                                    this.refreshModal();
+                                })
+                                .catch(error => {
+                                    showToast('Failed to save category', 'error');
+                                    console.error(error);
+                                });
+                        }
                     },
                     deleteCategory(category) {
-                        if (confirm(
-                            `Are you sure you want to delete "${category.name}"? This action cannot be undone.`)) {
-                            // Implementation for deleting category
-                            console.log('Delete category:', category);
-                        }
+                        if (!confirm(
+                                `Are you sure you want to delete "${category.name}"? This action cannot be undone.`))
+                            return;
+
+                        this.$axios.delete(`/admin/events/categories/${category.id}/delete`)
+                            .then(response => {
+                                showToast(response.data.message, response.data.status);
+
+                                // Remove the item from categoriesList
+                                this.categoriesList = this.categoriesList.filter(c => c.id !== category.id);
+                            })
+                            .catch(error => {
+                                showToast('Failed to delete category', 'error');
+                                console.error(error);
+                            });
+
+                    },
+                    searchFilter() {
+                        const s = this.search.toLowerCase();
+                        // console.log(s);
+                        this.categoriesList = this.allCategories.filter(category => category.name.toLowerCase()
+                            .includes(s) ||
+                            (category.description && category.description.toLowerCase().includes(s))
+                        )
                     }
                 },
             });

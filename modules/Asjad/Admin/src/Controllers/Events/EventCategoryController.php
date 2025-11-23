@@ -10,7 +10,7 @@ class EventCategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('events')->paginate(10);
+        $categories = Category::withCount('events')->get();
         return view('admin::Events.Categories.index', compact('categories'));
     }
 
@@ -27,8 +27,49 @@ class EventCategoryController extends Controller
             $category->active_events_count = 0;
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Category Successfully Added!',
+                'status'   => 'success',
+                'message'  => 'Category Successfully Added!',
+                'category' => $category,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update(Request $request,$id)
+    {
+        try {
+            $category = Category::find($id);
+            $data = $request->all();
+
+            $category->update($data);
+
+            return response()->json([
+                'status'   => 'success',
+                'message'  => 'Category Successfully Updated!',
+                'category' => $category,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $category = Category::find($id);
+
+            $category->delete();
+
+            return response()->json([
+                'status'   => 'success',
+                'message'  => 'Category Successfully Deleted!',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
