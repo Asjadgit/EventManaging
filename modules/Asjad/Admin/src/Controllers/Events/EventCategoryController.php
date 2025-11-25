@@ -10,7 +10,28 @@ class EventCategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('events')->get();
+        $query = Category::withCount('events');
+
+        // Apply search if provided
+        if($search = request()->get('search')){
+            $query->where(function($q) use ($search){
+                $q->where('name','LIKE',"%{$search}%")
+                 ->orWhere('description', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $categories = $query->paginate(10)->withQueryString();
+        // If AJAX request, return JSON instead of full blade
+        if (request()->ajax()) {
+        return response()->json([
+            'data'          => $categories->items(),
+            'current_page'  => $categories->currentPage(),
+            'last_page'     => $categories->lastPage(),
+            'pages'         => range(1, $categories->lastPage()),
+            'next_page_url' => $categories->nextPageUrl(),
+            'prev_page_url' => $categories->previousPageUrl(),
+        ]);
+    }
         return view('admin::Events.Categories.index', compact('categories'));
     }
 
@@ -39,7 +60,7 @@ class EventCategoryController extends Controller
         }
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         try {
             $category = Category::find($id);
